@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/kevin0629/my-helm-charts/releases/download/my-hello-world-0.1.0/my-hello-world-0.1.0.tgz
     version: 0.1.0
+  nginx:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-10T13:06:09.070572972Z"
+    description: Easy Nginx Chart for Demo
+    digest: 073d489ea21d580042a4cc0cc831ccf2fb42adf5ed7b103812df3b37745e4a5c
+    name: nginx
+    type: application
+    urls:
+    - https://github.com/kevin0629/my-helm-charts/releases/download/nginx-0.1.0/nginx-0.1.0.tgz
+    version: 0.1.0
   order-system:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -28,4 +39,4 @@ entries:
     urls:
     - https://github.com/kevin0629/my-helm-charts/releases/download/order-system-0.1.0/order-system-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-10T13:02:34.714851009Z"
+generated: "2025-12-10T13:06:09.070580716Z"
