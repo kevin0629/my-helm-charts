@@ -1,0 +1,99 @@
+# ===================================================================
+# Order Management System - Helm Values
+# ===================================================================
+
+# 應用程式配置
+app:
+  name: order-system
+  replicaCount: 3
+  
+  image:
+    repository: kevinkuo0629/order-system
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    type: NodePort
+    port: 8000
+    targetPort: 8000
+    nodePort: 30080
+  
+  # 環境變數配置
+  env:
+    secretKey: "change_me_to_a_very_long_and_random_string_for_security"
+  
+  # 健康檢查配置
+  livenessProbe:
+    enabled: true
+    path: /docs
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  
+  readinessProbe:
+    enabled: true
+    path: /docs
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+# MySQL 配置
+mysql:
+  enabled: true
+  name: mysql
+  
+  image:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+  
+  # 資料庫憑證 (生產環境請務必修改!)
+  auth:
+    rootPassword: "113423027"
+    database: "order_management_system"
+    username: "kevin"
+    password: "113423027"
+  
+  service:
+    type: ClusterIP
+    port: 3306
+  
+  # 持久化儲存配置
+  persistence:
+    enabled: true
+    storageClass: "longhorn"  # 使用 Longhorn StorageClass
+    size: 1Gi
+    path: /mnt/data/mysql
+  
+  # 資料庫初始化
+  initdb:
+    enabled: true
+    # 如果需要自動執行 SQL 腳本，設為 true
+    createSchema: true
+
+# 本地儲存配置 (選用 - 僅在需要自訂 StorageClass 時啟用)
+localStorage:
+  enabled: false  # RKE2 預設使用 local-path provisioner，通常不需要自訂
+  # 如果需要在特定節點上使用 hostPath，可以啟用此選項
+  nodeName: ""  # 指定節點名稱，例如: rke2-node-1
+  # PV 配置
+  persistentVolume:
+    name: mysql-local-pv
+    capacity: 1Gi
+    reclaimPolicy: Retain
+    hostPath: /mnt/data/mysql
+
+# 資源限制 (生產環境建議啟用)
+resources:
+  app:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  mysql:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi

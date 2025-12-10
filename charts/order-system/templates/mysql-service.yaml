@@ -1,0 +1,15 @@
+{{- if .Values.mysql.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mysql.name }}
+  labels:
+    {{- include "order-system.mysql.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.mysql.service.type }}
+  ports:
+    - port: {{ .Values.mysql.service.port }}
+      targetPort: {{ .Values.mysql.service.port }}
+  selector:
+    app: {{ .Values.mysql.name }}
+{{- end }}

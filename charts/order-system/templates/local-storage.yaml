@@ -1,0 +1,45 @@
+{{- if .Values.localStorage.enabled }}
+# ===================================================================
+# 自訂 Local StorageClass (選用)
+# 注意: RKE2 預設已包含 local-path provisioner
+# 只有在需要使用 hostPath 綁定特定節點時才需要啟用
+# ===================================================================
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.mysql.persistence.storageClass }}
+  labels:
+    {{- include "order-system.labels" . | nindent 4 }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+
+---
+# ===================================================================
+# Local PersistentVolume - 綁定到特定節點的 hostPath
+# ===================================================================
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.localStorage.persistentVolume.name }}
+  labels:
+    {{- include "order-system.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.localStorage.persistentVolume.capacity }}
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.localStorage.persistentVolume.reclaimPolicy }}
+  storageClassName: {{ .Values.mysql.persistence.storageClass }}
+  local:
+    path: {{ .Values.localStorage.persistentVolume.hostPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ .Values.localStorage.nodeName }}
+{{- end }}
