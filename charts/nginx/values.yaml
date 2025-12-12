@@ -39,3 +39,9 @@ sftp:
     port: 22
     targetPort: 22
     nodePort: 30480
+
+
+pvc:
+  name: site-data
+  storageClassName: longhorn
+  storage: 1Gi

@@ -26,4 +26,4 @@ spec:
     volumes:
       - name: site-data
         persistentVolumeClaim:
-          claimName: site-data
+          claimName: {{ .Values.pvc.name }}

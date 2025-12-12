@@ -34,12 +34,8 @@ spec:
         - containerPort: 22
         volumeMounts:
         - name: site-data
-          mountPath: /home/user1/web
-          subPath: public
-        - name: site-data
-          mountPath: /home/user1/log
-          subPath: log
+          mountPath: /home/{{ .Values.sftp.credentials.username }}/web
       volumes:
       - name: site-data
         persistentVolumeClaim:
-          claimName: site-data
+          claimName: {{ .Values.pvc.name }}
