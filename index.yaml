@@ -3,6 +3,16 @@ entries:
   nginx:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-12T02:51:58.351145954Z"
+    description: Easy Nginx Chart for Demo
+    digest: b9739a44383a4c06a770039440309adc3491ad16bf16fd798e6f3a9581eab417
+    name: nginx
+    type: application
+    urls:
+    - https://github.com/kevin0629/my-helm-charts/releases/download/nginx-0.2.0/nginx-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-10T13:06:09.070572972Z"
     description: Easy Nginx Chart for Demo
     digest: 073d489ea21d580042a4cc0cc831ccf2fb42adf5ed7b103812df3b37745e4a5c
@@ -28,4 +38,4 @@ entries:
     urls:
     - https://github.com/kevin0629/my-helm-charts/releases/download/order-system-0.1.0/order-system-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-10T13:06:09.070580716Z"
+generated: "2025-12-12T02:51:58.35115443Z"
