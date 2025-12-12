@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.sftp.name }}-service
+  labels:
+    app: {{ .Values.sftp.name }}
+spec:
+  type: {{ .Values.sftp.service.type }}
+  ports:
+    - port: {{ .Values.sftp.service.port }}
+      targetPort: {{ .Values.sftp.service.targetPort }}
+      nodePort: {{ .Values.sftp.service.nodePort }}
+      protocol: TCP
+  selector:
+    app: {{ .Values.sftp.name }}

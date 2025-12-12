@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.sftp.name }}
+  labels:
+    app: {{ .Values.sftp.name }}
+spec:
+  replicas: {{ .Values.sftp.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.sftp.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.sftp.name }}
+    spec:
+      containers:
+      - name: sftp
+        image: "{{ .Values.sftp.image.repository }}:{{ .Values.sftp.image.tag }}"
+        imagePullPolicy: {{ .Values.sftp.image.pullPolicy }}
+        env:
+          - name: SFTP_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.sftp.name }}-secret
+                key: username
+          - name: SFTP_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.sftp.name }}-secret
+                key: password
+        args: ["$(SFTP_USER):$(SFTP_PASS):{{ .Values.sftp.credentials.uid }}"]
+        ports:
+        - containerPort: 22
+        volumeMounts:
+        - name: site-data
+          mountPath: /home/user1/web
+          subPath: public
+        - name: site-data
+          mountPath: /home/user1/log
+          subPath: log
+      volumes:
+      - name: site-data
+        persistentVolumeClaim:
+          claimName: site-data

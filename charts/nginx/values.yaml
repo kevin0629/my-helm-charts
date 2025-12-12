@@ -1,11 +1,41 @@
-replicaCount: 1
+app:
+  name: nginx
+  replicaCount: 1
+  image:
+    repository: nginx
+    tag: alpine
+    pullPolicy: Always
 
-image:
-  repository: nginx
-  tag: alpine
-  pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
 
-service:
-  type: NodePort
-  port: 80
-  nodePort: 30080
+  ingress:
+    enabled: true
+    className: haproxy
+    host: example.com
+    secretName: nginx-tls-secret
+    path: /
+    pathType: Prefix
+    annotations:
+      haproxy.org/ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+sftp:
+  name: site-sftp
+  replicaCount: 1
+  image:
+    repository: atmoz/sftp
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  credentials:
+    username: user1
+    password: password
+    uid: "1001"
+  
+  service:
+    type: NodePort
+    port: 22
+    targetPort: 22
+    nodePort: 30480
